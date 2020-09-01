@@ -14,6 +14,7 @@ def get_content(page_search, urls):
         page+=1
 
 
+# Scraping function that does all the hard work on single page URL
 def scrape(url_, page_search, page_number):
     page_search.lower()
     r = requests.get(url_)
@@ -29,10 +30,13 @@ def scrape(url_, page_search, page_number):
     ''')
 
 # Function for defining last page
+
 def page_num():
     r = requests.get('https://www.kupujemprodajem.com/mobilni-telefoni/apple-iphone/grupa/23/489/1')
     soup = BeautifulSoup(r.text, 'lxml')
     return soup.find('input', {'name':'data[page]'}).get('value')
+
+# Getting all urls in one list
 
 def get_urls(src, max_page):
     ls = []    
@@ -46,15 +50,21 @@ def get_urls(src, max_page):
 
 if __name__=="__main__":
 
-    # Input for product we want to search
-    input_form = input("Search >>> ")
+    try:
 
-     # Source page for getting number of the last page
-    src = 'https://www.kupujemprodajem.com/mobilni-telefoni/apple-iphone/grupa/23/489/'
-    max_page = int(page_num())
+        # Input for product we want to search
+        input_form = input("Search >>> ")
 
-    # Iterating through every page and extracting content that satisfies the input
+        # Source page for getting number of the last page
+        src = 'https://www.kupujemprodajem.com/mobilni-telefoni/apple-iphone/grupa/23/489/'
+        max_page = int(page_num())
 
-    print('\n')
-    get_content(input_form, get_urls(src, max_page))
+        # Iterating through every page and extracting content that satisfies the input
+
+        print('\n')
+        get_content(input_form, get_urls(src, max_page))
+    
+    except: 
+        
+        print("An error occurred, please try again")
 
