@@ -1,4 +1,5 @@
 # KP tracking 
+from multiprocessing import Pool
 from bs4 import BeautifulSoup
 import requests
 
@@ -6,9 +7,16 @@ import requests
 
 
 # Function that extracts contents of a page 
-def get_content(page_source, page_search, page_number):
+def get_content(page_search, urls):
+    page = 1
+    for url_ in urls:
+        scrape(url_, page_search, page)
+        page+=1
+
+
+def scrape(url_, page_search, page_number):
     page_search.lower()
-    r = requests.get(page_source)
+    r = requests.get(url_)
     soup = BeautifulSoup(r.text, 'lxml')
     for match in soup.find_all('a', class_='adName', href=True):
         heading = match.text
@@ -25,17 +33,28 @@ def page_num():
     r = requests.get('https://www.kupujemprodajem.com/mobilni-telefoni/apple-iphone/grupa/23/489/1')
     soup = BeautifulSoup(r.text, 'lxml')
     return soup.find('input', {'name':'data[page]'}).get('value')
-    
+
+def get_urls(src, max_page):
+    ls = []    
+    for page in range(1, max_page + 1):
+        ls.append(src+f'{str(page)}')
+    return ls
 
 
-# Input for product we want to search
-input_form = input("Search >>> ")
 
-# Source page for getting number of the last page
-src = 'https://www.kupujemprodajem.com/mobilni-telefoni/apple-iphone/grupa/23/489/'
-max_page = int(page_num())
 
-# Iterating through every page and extracting content that satisfies the input
-for page in range(1, max_page + 1):
-   get_content(src+f'{str(page)}', input_form, page)
+
+if __name__=="__main__":
+
+    # Input for product we want to search
+    input_form = input("Search >>> ")
+
+     # Source page for getting number of the last page
+    src = 'https://www.kupujemprodajem.com/mobilni-telefoni/apple-iphone/grupa/23/489/'
+    max_page = int(page_num())
+
+    # Iterating through every page and extracting content that satisfies the input
+
+    print('\n')
+    get_content(input_form, get_urls(src, max_page))
 
