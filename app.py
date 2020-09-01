@@ -13,8 +13,7 @@ def get_content(page_source, page_search, page_number):
     for match in soup.find_all('a', class_='adName', href=True):
         heading = match.text
         if input_form in heading.lower():
-            print(f'{heading} - {match["href"]}')
-
+            print(f'{heading.lower()} - {match["href"]}')
     print(f'''
     
     Page {page_number}
@@ -32,7 +31,7 @@ def page_num():
 # Input for product we want to search
 input_form = input("Search >>> ")
 
-# Source page for getting number of last page
+# Source page for getting number of the last page
 src = 'https://www.kupujemprodajem.com/mobilni-telefoni/apple-iphone/grupa/23/489/'
 max_page = int(page_num())
 
