@@ -1,7 +1,9 @@
 # KP tracking 
+# currently testing multiprocessing tool to speed up scraping multiple pages
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
 import requests
+
 
 # index.html is for testing purposes 
 
